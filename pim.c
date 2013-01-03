@@ -9,7 +9,9 @@ int get_pim_data(FILE* in, PIM* p);
 int get_pim_palette(FILE* in, PIM* p);
 void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
-
+/***************************************************
+ * Charge le fichier in dans l'image p
+ **************************************************/
 int load_pim(FILE* in, PIM* p)
 {
     get_pim_header(in, p);
@@ -20,6 +22,11 @@ int load_pim(FILE* in, PIM* p)
     return 0;
 }
 
+
+/***************************************************
+ * Affiche l'image p sur la surface s via la méthode 
+ * de fast-blit                      
+ * ************************************************/
 int blit_pim(SDL_Surface* s, PIM* p)
 {
     
@@ -51,6 +58,9 @@ int blit_pim(SDL_Surface* s, PIM* p)
     return 0;
 }
 
+/***************************************************
+ * Récupère la palette du fichier in dans l'image p
+ * ************************************************/
 int get_pim_palette(FILE* in, PIM* p)
 {
     fseek(in, p->info.palette_offset, SEEK_SET);
@@ -73,6 +83,10 @@ int get_pim_palette(FILE* in, PIM* p)
     return 0;
 }
 
+/***************************************************
+ * Récupère les données des pixels du fichier in 
+ * dans l'image p
+ * ************************************************/
 int get_pim_data(FILE* in, PIM* p)
 {
     int size = p->info.width*p->info.height;
@@ -97,6 +111,10 @@ int get_pim_data(FILE* in, PIM* p)
     return 0;
 }
 
+
+/***************************************************
+ * Récupère le header du fichier in dans l'image p
+ * ************************************************/
 int get_pim_header(FILE* in, PIM* p)
 {
     if(fread(&p->head.sign, sizeof(char), 4, in) != 4)
@@ -116,6 +134,11 @@ int get_pim_header(FILE* in, PIM* p)
     return 0;
 }
 
+
+/***************************************************
+ * Récupère toutes les infos qui ne sont pas des 
+ * infos pixels ou de couleur ni le header
+ * ************************************************/
 int get_pim_info(FILE* in, PIM* p)
 {
     fseek(in, 0x10, SEEK_SET);
@@ -148,6 +171,10 @@ int get_pim_info(FILE* in, PIM* p)
     return 0;
 }
 
+/***************************************************
+ * Met le pixel de la surface aux coordonnées (x, y)
+ * a la couleur pixels
+ * ************************************************/
 void set_pixel(SDL_Surface *surface, int x, int y, Uint32 pixel)
 {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
